@@ -14,7 +14,18 @@ function push(){
 
         if(longWord.endsWith("ポプテピピック")){
             clearInterval(start);
-            popuko.innerHTML = "end";
+            popuko.innerHTML = "祝";
+
+            // 　　　 ∥
+            // 　γ⌒／＼⌒ヽ
+            // 　( ／|￣|＼ )
+            // 　；｡*|祝|ミ☆.
+            // ☆ﾞ・%|　|゜∵；。
+            // ﾟ∴ﾟ：|　|`｡・゜∴
+            // 。･* ｡|＿|〟･ %：ﾟ
+            // 　・☆彡∴ ゜; * ｡
+            // 　。∵　゜。　・
+            // ";
         }
     };
 
