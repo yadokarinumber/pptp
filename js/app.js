@@ -12,8 +12,8 @@ var add = function(){
 
     if(longWord.endsWith("ポプテピピック")){
         popuko.innerHTML = "end";
-        clearInterval(setInterval(add, 10));
+        clearInterval(start);
     }
 };
 
-setInterval(add, 10);
+var start = setInterval(add, 10);
