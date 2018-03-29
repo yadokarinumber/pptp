@@ -8,12 +8,12 @@ var add = function(){
 
     var random = Math.floor(Math.random() * array.length);  // スコープ外だとNG
     pipimi.innerHTML += array[random];
-    var longWord = pipimi.innerHTML;
+    var longWord = pipimi.innerHTML; // 変数に入れたほうが良いの？
 
     if(longWord.endsWith("ポプテピピック")){
         popuko.innerHTML = "end";
-        clearInterval(start);
+        clearInterval(setInterval(add, 10));
     }
 };
 
-var start = setInterval(add, 10);
+setInterval(add, 10);
