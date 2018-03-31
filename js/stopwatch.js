@@ -1,46 +1,55 @@
-var btn = document.getElementById("btn");
 
-var start_time = (new Date()).getTime(), 
-    end_time = (new Date()).getTime();
-
-updateStopWatch();
-
-btn.addEventListener("click", function(){
-    var timer = setInterval(function(){
-        updateStopWatch();
-        if (done()) clearInterval(timer);
-    }, 25);
-})
-
-//--------------------------------------------------
-
-// 数値の桁数を設定（0埋め）
-function zeroFill(num, min_digits){
-    var pad = min_digits - (num + '').length;
-    if (pad > 0) {
-        return '0'.repeat(pad) + num;
-    }
-    return num;
+function StopWatch(options){
+    this._start = null;
+    this._interval = null;
+    this.time = '00:00:00';
+    this.duration = options.duration || 500;
+    this.customFn = options.customFn || function(){};
+    this.customFn(this);
 }
 
-// タイマー更新
-function updateStopWatch(){
-    end_time = (new Date()).getTime();
+StopWatch.prototype._now = function(){
+    return (new Date()).getTime();
+}
 
-    var elapsed = end_time - start_time;
-    
-    var min = Math.floor(elapsed / 1000 / 60); 
-    var sec = Math.floor(elapsed / 1000 % 60);
-    var msec = (elapsed + '').slice(-3, -1);
-    
-    document.getElementById("js-digital_clock").innerHTML = [
-        zeroFill(min, 2),
-        zeroFill(sec, 2),
-        zeroFill(msec, 2)
+StopWatch.prototype._format = function(ms){
+    var secs = ms / 1000;
+    var sec = Math.floor(secs % 60);
+    var min = Math.floor(secs / 60);
+    var msec = (ms + '').slice(-3, -1);
+
+    return [
+        ('0' + min).slice(-2),
+        ('0' + sec).slice(-2),
+        msec
     ].join(':');
 }
 
-// 完了チェック
-function done(){
-    return document.getElementById("pipimi").innerHTML.endsWith("ポプテピピック");
+StopWatch.prototype.start = function(){
+    this._start = this._now();
+    this._interval = setInterval(function(sw){
+        sw.time = sw._format(sw._now() - sw._start);
+        sw.customFn(sw);
+    }, this.duration, this);
 }
+
+StopWatch.prototype.stop = function(){
+    clearInterval(this._interval);
+}
+
+
+var options = {
+    duration: 25,
+    customFn: function(sw){
+        document.getElementById("js-digital_clock").innerHTML = sw.time;
+        if (document.getElementById("pipimi").innerHTML.endsWith("ポプテピピック")){
+            sw.stop();
+        }
+    }
+};
+
+var SW = new StopWatch(options);
+
+document.getElementById("btn").addEventListener("click", function(){
+    SW.start();
+});
